@@ -1,11 +1,118 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Argon - Login</title>
+	</head>
+	<body>
+		<div class="background"></div>
+		<div class="content">
+			<div class="card">
+				<h1 id="title">Argon</h1>
+
+				<div class="input-container">
+					<input placeholder="Secret Key" type="password" id="secret-key">
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
+
+<style>
+	@font-face {
+		font-family: Momentz;
+		src: url("/fonts/Momentz.ttf");
+		font-weight: normal;
+		font-size: normal;
+		font-display: swap;
+	}
+
+	html,
+	body {
+		margin: 0;
+		width: 100%;
+		height: 100vh;
+		overflow: hidden;
+	}
+
+	.background {
+		background-image: url("/background.gif");
+		filter: blur(4px);
+		-webkit-filter: blur(4px);
+
+		width: 100%;
+		height: 100%;
+		transform: scale(1.1);
+		z-index: 0;
+
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+
+	.content {
+		position: absolute;
+		display: flex;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		justify-content: center;
+		align-items: center;
+		margin: auto;
+		text-align: center;
+	}
+
+	.card {
+		justify-content: center;
+		align-content: center;
+		width: 640px;
+		height: 480px;
+		border: none;
+		border-radius: 10px;
+		background: radial-gradient(ellipse farthest-side at 76% 77%, rgba(245, 228, 212, 0.25) 4%, rgba(255, 255, 255, 0) calc(4% + 1px)), radial-gradient(circle at 76% 40%, #fef6ec 4%, rgba(255, 255, 255, 0) 4.18%), linear-gradient(135deg, #ff0000 0%, #000036 100%), radial-gradient(ellipse at 28% 0%, #ffcfac 0%, rgba(98, 149, 144, 0.5) 100%), linear-gradient(180deg, #cd6e8a 0%, #f5eab0 69%, #d6c8a2 70%, #a2758d 100%);
+		background-blend-mode: normal, normal, screen, overlay, normal;
+		box-shadow: 0px 0px 10px 1px #000000;
+	}
+
+	#title {
+		font-family: "Momentz", sans-serif;
+		font-size: 72px;
+	}
+
+	.input-container {
+		position: absolute;
+		left: 42.5%;
+		width: 260px;
+		height: 60px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: linear-gradient(to bottom,rgb(227, 213, 255),rgb(255, 231, 231));
+		border-radius: 30px;
+		overflow: hidden;
+		cursor: pointer;
+		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+	}
+
+	#secret-key {
+		width: 200px;
+		height: 40px;
+		border: none;
+		outline: none;
+		caret-color: rgb(255, 81, 0);
+		background-color: rgb(255, 255, 255);
+		border-radius: 30px;
+		padding-left: 15px;
+		letter-spacing: 0.8px;
+		color: rgb(19, 19, 19);
+		font-size: 13.4px;
+	}
+</style>
