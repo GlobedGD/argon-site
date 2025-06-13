@@ -18,16 +18,35 @@
 
 				<div class="input-container">
 					<input placeholder="Secret Key" type="password" id="secret-key">
+					<button id="submit-key">Login</button>
 				</div>
 			</div>
 		</div>
+
+		<script>
+			function login() {
+				const secretKey = document.querySelector("#secret-key").value;
+				fetch("http://127.0.0.1:4341/v1/admin/login", {
+					method: "POST",
+					body: secretKey
+				}).then((res) => {
+					if (res.status == 200) {
+						window.location.href = res.url;
+					}
+				})
+			}
+
+			document.querySelector("#submit-key")?.addEventListener("click", () => {
+				login()
+			})
+		</script>
 	</body>
 </html>
 
 <style>
 	@font-face {
 		font-family: Momentz;
-		src: url("/fonts/Momentz.ttf");
+		src: url("/dashboard/fonts/Momentz.ttf");
 		font-weight: normal;
 		font-size: normal;
 		font-display: swap;
@@ -42,7 +61,7 @@
 	}
 
 	.background {
-		background-image: url("/background.gif");
+		background-image: url("/dashboard/background.gif");
 		filter: blur(4px);
 		-webkit-filter: blur(4px);
 
@@ -100,6 +119,7 @@
 		overflow: hidden;
 		cursor: pointer;
 		box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.075);
+		padding: 10px;
 	}
 
 	#secret-key {
@@ -115,4 +135,51 @@
 		color: rgb(19, 19, 19);
 		font-size: 13.4px;
 	}
+
+	#submit-key {
+		align-items: center;
+		background-color: #FFFFFF;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 1rem;
+		box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+		box-sizing: border-box;
+		color: rgba(0, 0, 0, 0.85);
+		cursor: pointer;
+		display: inline-flex;
+		font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+		font-size: 12px;
+		font-weight: 600;
+		justify-content: center;
+		line-height: 1.25;
+		min-height: 2rem;
+		padding: 10px;
+		text-decoration: none;
+		transition: all 250ms;
+		user-select: none;
+		-webkit-user-select: none;
+		touch-action: manipulation;
+		vertical-align: baseline;
+		width: auto;
+		margin-left: 10px;
+	}
+
+	#submit-key:hover,
+	#submit-key:focus {
+	border-color: rgba(0, 0, 0, 0.15);
+	box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+	color: rgba(0, 0, 0, 0.65);
+	}
+
+	#submit-key:hover {
+	transform: translateY(-1px);
+	}
+
+	#submit-key:active {
+	background-color: #F0F0F1;
+	border-color: rgba(0, 0, 0, 0.15);
+	box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+	color: rgba(0, 0, 0, 0.65);
+	transform: translateY(0);
+	}
+
 </style>
