@@ -1,5 +1,5 @@
 # Argon Site
-Optional Dashboard to interface with your [Argon Server](https://github.com/GlobedGD/argon-server).
+Optional Dashboard to interface with your [Argon Server](https://github.com/GlobedGD/argon-server). Made by [LimeGradient](https://github.com/LimeGradient).
 
 # Setup
 1. Clone the repository and install all the packages with `npm install`
