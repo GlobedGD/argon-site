@@ -14,14 +14,116 @@
 		<div class="background"></div>
 		<div class="content">
             <h1 id="title">Admin Page</h1>
+			<div class="create-key">
+				<input placeholder="Name" id="create-key-name">
+				<input placeholder="Owner" id="create-key-owner">
+				<input placeholder="Description" id="create-key-description">
+				<input placeholder="Per Day" id="create-key-perday">
+				<input placeholder="Per Hour" id="create-key-perhour">
+				<button id="create-key-button">Create Key</button>
+			</div>
+			<div id="token-show"></div>
+			<table class="key-table">
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Owner</th>
+					<th>Description</th>
+					<th>Per Day</th>
+					<th>Per Hour</th>
+					<th>Modify</th>
+				</tr>
+			</table>
+			<button id="logout-btn">Logout</button>
 		</div>
+
+		<script>
+			function deleteToken() {
+				// does nothing rn
+			}
+
+			function getTokens() {
+				fetch("/v1/admin/api/tokens").then((res) => {
+					if (res.status != 200) {
+						window.location.href = "/dashboard/index.html"
+					} else {
+						res.json().then((tokens) => {
+							const tokensTable = document.querySelector(".key-table")
+							tokens.forEach(token => {
+								const row = tokensTable.insertRow(-1)
+								
+								const cell1 = row.insertCell(0);
+								const cell2 = row.insertCell(1);
+								const cell3 = row.insertCell(2);
+								const cell4 = row.insertCell(3);
+								const cell5 = row.insertCell(4);
+								const cell6 = row.insertCell(5);
+								const modifyCell = row.insertCell(6);
+
+								cell1.innerHTML = token["id"];
+								cell2.innerHTML = token["name"];
+								cell3.innerHTML = token["owner"];
+								cell4.innerHTML = token["description"];
+								cell5.innerHTML = token["validations_per_day"];
+								cell6.innerHTML = token["validations_per_hour"];
+								
+								const deleteBtn = document.createElement("button")
+								deleteBtn.innerHTML = "Delete"
+								deleteBtn.onclick = () => deleteToken()
+								modifyCell.appendChild(deleteBtn)
+							});
+						})
+					}
+				})
+			}
+
+			function createKey() {
+				const key = {
+					name: document.querySelector("#create-key-name").value,
+					owner: document.querySelector("#create-key-owner").value,
+					description: document.querySelector("#create-key-description").value,
+					perday: document.querySelector("#create-key-perday").value,
+					perhour: document.querySelector("#create-key-perhour").value
+				};
+
+				const params = new URLSearchParams(key)
+				fetch("/v1/admin/api/create-token?" + params, {
+					method: "POST"
+				}).then((res) => {
+					res.text().then((text) => {
+						const tokenShow = document.querySelector("#token-show")
+						const element = document.createElement("p")
+						element.textContent = `Token: ${text}`
+						tokenShow?.appendChild(element)
+					})
+				})
+			}
+
+			document.querySelector("#create-key-button")?.addEventListener("click", () => {
+				createKey()
+			})
+
+			document.querySelector("#logout-btn")?.addEventListener("click", () => {
+				fetch("/v1/admin/logout", {
+					method: "POST"
+				}).then((res) => {
+					if (res.status == 200) {
+						window.location.href = res.url;
+					}
+				})
+			})
+
+			window.onload = () => {
+				getTokens()
+			}
+		</script>
 	</body>
 </html>
 
 <style>
 	@font-face {
 		font-family: Momentz;
-		src: url("/fonts/Momentz.ttf");
+		src: url("/dashboard/fonts/Momentz.ttf");
 		font-weight: normal;
 		font-size: normal;
 		font-display: swap;
@@ -33,26 +135,28 @@
 		width: 100%;
 		height: 100vh;
 		overflow: hidden;
+		background: radial-gradient(ellipse farthest-side at 76% 77%, rgba(245, 228, 212, 0.25) 4%, rgba(255, 255, 255, 0) calc(4% + 1px)), radial-gradient(circle at 76% 40%, #fef6ec 4%, rgba(255, 255, 255, 0) 4.18%), linear-gradient(135deg, #ff0000 0%, #000036 100%), radial-gradient(ellipse at 28% 0%, #ffcfac 0%, rgba(98, 149, 144, 0.5) 100%), linear-gradient(180deg, #cd6e8a 0%, #f5eab0 69%, #d6c8a2 70%, #a2758d 100%);
+		background-blend-mode: normal, normal, screen, overlay, normal;
 	}
 
-	.background {
-		background-image: url("/background.gif");
-		filter: blur(4px);
-		-webkit-filter: blur(4px);
+	table {
+		width: 50%;
+		background-color: #e494fc69;
+	}
+	
+	table, th, td {
+		border: 1px solid;
+		border-collapse: collapse;
+	}
 
-		width: 100%;
-		height: 100%;
-		transform: scale(1.1);
-		z-index: 0;
-
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: cover;
+	td {
+		margin: 5px;
 	}
 
 	.content {
 		position: absolute;
 		display: flex;
+		flex-direction: column;
 		top: 0;
 		left: 0;
 		width: 100%;
@@ -83,6 +187,60 @@
         text-fill-color: transparent;
         background-size: 500% auto;
         animation: textShine 5s ease-in-out infinite alternate;
+	}
+
+	.create-key {
+		display: flex;
+		flex-direction: row;
+		gap: 10px;
+		margin: 15px;
+	}
+
+	#logout-btn {
+		margin-top: 25px;
+		align-items: center;
+		background-color: #FFFFFF;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		border-radius: 1rem;
+		box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+		box-sizing: border-box;
+		color: rgba(0, 0, 0, 0.85);
+		cursor: pointer;
+		display: inline-flex;
+		font-family: system-ui,-apple-system,system-ui,"Helvetica Neue",Helvetica,Arial,sans-serif;
+		font-size: 12px;
+		font-weight: 600;
+		justify-content: center;
+		line-height: 1.25;
+		min-height: 2rem;
+		padding: 10px;
+		text-decoration: none;
+		transition: all 250ms;
+		user-select: none;
+		-webkit-user-select: none;
+		touch-action: manipulation;
+		vertical-align: baseline;
+		width: auto;
+		margin-left: 10px;
+	}
+
+	#logout-btn:hover,
+	#logout-btn:focus {
+		border-color: rgba(0, 0, 0, 0.15);
+		box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+		color: rgba(0, 0, 0, 0.65);
+	}
+
+	#logout-btn:hover {
+		transform: translateY(-1px);
+	}
+
+	#logout-btn:active {
+		background-color: #F0F0F1;
+		border-color: rgba(0, 0, 0, 0.15);
+		box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+		color: rgba(0, 0, 0, 0.65);
+		transform: translateY(0);
 	}
 
     @keyframes textShine {
